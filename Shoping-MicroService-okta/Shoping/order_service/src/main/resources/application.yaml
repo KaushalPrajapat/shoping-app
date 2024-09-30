@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: ORDER-SERVICE
+
+  # Server configuration
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/shopingdb
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # Config server link to fetch Eureka properties
+  config:
+    import: configserver:http://localhost:9296
+
+  # OKTA configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-60234677.okta.com/oauth2/default
+      client:
+        registration:
+          internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: 0oajutv11yU0bi6MP5d7
+            client-secret: z5pkRQTBrxnxhexRess4C_TSv_0jBIzqwEHfxnw4S1_Qw9VU_zOeskOPRsOTUOdM
+        provider:
+          okta:
+            issuer-uri: https://dev-60234677.okta.com/oauth2/default
+
+# Server port configuration
+server:
+  port: 8200

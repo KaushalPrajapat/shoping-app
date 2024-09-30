@@ -11,6 +11,16 @@ Now Implement
 	CONFIG				9296
 	API GATEWAY			8765
 	SERVER_REGISTRY			8761
+New Here:
+	Security at ORDER, USER, PAYMENT, API-GATEWAY, PAYMENT
+
+Added controllers in API-GATEWAY
+Controller:
+	> GET - login
+
+LINKS:
+	localhost:8765/authenticate/login (okta-credentials)
+						prajapatkaushal555@gmail.com	-	okta@kaushal
 
 
 1.PRODUCT		8100
@@ -183,16 +193,6 @@ RESPONSE_EXCEPTION
     private String httpStatus;
 
 
-
-
-resilience4j.circuitbreaker.instances.external.event-consumer-buffer-size=10
-resilience4j.circuitbreaker.instances.external.failure-rate-threshold=50
-resilience4j.circuitbreaker.instances.external.minimum-number-of-calls=5
-resilience4j.circuitbreaker.instances.external.automatic-transition-from-open-to-half-open-enabled=true
-resilience4j.circuitbreaker.instances.external.wait-duration-in-open-state=5s
-resilience4j.circuitbreaker.instances.external.permitted-number-of-calls-in-half-open-state=3
-resilience4j.circuitbreaker.instances.external.sliding-window-size=10
-resilience4j.circuitbreaker.instances.external.sliding-window-type=COUNT_BASED
 
 
 GITHUB-BRANCH and methods to push

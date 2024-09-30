@@ -1,46 +1,11 @@
-EMPLOYEE Micro-service is in personal PC +
-Personal PC files are at GITHUB : https://github.com/KaushalPrajapat/microServicePersonalPC.git
 
-https://app.diagrams.net/
-
-Now Implement 
-	PRODUCT				8100
-	ORDER				8200
-	USER				8300
-	PAYMENT				8400
-	CONFIG				9296
-	API GATEWAY			8765
-	SERVER_REGISTRY			8761
-
-
-1.PRODUCT		8100
-Controller 
-	: /product
-	> GET - getAllProducts				done
-	> POST - addProduct				done
-	> GET - getProductsByprodNameOrProdPrice	done
-		- if name given (Contains)
-		- if price	(equals)
-		- if none given	(return all)
-		- if both given	(filter both)
-
-	: /product/{id}		
-	> GET - getProductById				done
-	> DELETE - deleteProductById			done
-	> PUT - updateProduct				done
-
-                		
-
-
-
-
-2.PRODUCT-SERVICE
+PRODUCT-SERVICE
 LINKS
-	GET 		localhost:8100/product
-	POST 		localhost:8100/product (RequestBody product)
+	GET 	localhost:8100/product
+	POST 	localhost:8100/product (RequestBody product)
 	GET		localhost:8100/product/productId (PathVariable long prodId)
 	GET		localhost:8100/product/filter?prodName=Realme&prodPrice=18999 (RequestParam 2)
-	DELETE		localhost:8100/product/productId (PathVariable long prodId)
+	DELETE	localhost:8100/product/productId (PathVariable long prodId)
 	PUT		localhost:8100/product/productId (PathVariable long prodId)
 
 ENTITIES & MODELS -
@@ -58,7 +23,7 @@ ENTITIES & MODELS -
 
 
 
-3.PAYMENT-SERVICE
+PAYMENT-SERVICE
 LINKS -
 	PUT		localhost:8400/payment/undo/30 (PathVariable long paymentId)
 	POST	localhost:8400/payment/do (@RequestBody paymentEntity)
@@ -86,13 +51,13 @@ ENTITIES & MODELS -
 		private double balance;
     
 
-4.USER-SERVICE
+USER-SERVICE
 LINKS
-	POST 		localhost:8300/user (RequestBody Users)
+	POST 	localhost:8300/user (RequestBody Users)
 	GET		localhost:8300/user (will return all users)
 	GET		localhost:8300/user/userId (PathVariable userId)
 	GET		localhost:8300/user/balance (PathVariable userId)(return balance)
-	DELETE		localhost:8300/user/userId (PathVariable userId)
+	DELETE	localhost:8300/user/userId (PathVariable userId)
 	PUT		localhost:8300/user/userId (RequestBody Users, PathVariable userId)
 	PUT		localhost:8300/user/addbalance/userId (PathVariable userId, Pathvariable double balancetoAdd)
 	PUT		localhost:8300/user/balance/do/{userId}/{balance} (PathVariable userId, Pathvariable double balancetoAdd)
@@ -181,22 +146,3 @@ NOTE : USED in all services
 RESPONSE_EXCEPTION
     private String message;
     private String httpStatus;
-
-
-
-
-resilience4j.circuitbreaker.instances.external.event-consumer-buffer-size=10
-resilience4j.circuitbreaker.instances.external.failure-rate-threshold=50
-resilience4j.circuitbreaker.instances.external.minimum-number-of-calls=5
-resilience4j.circuitbreaker.instances.external.automatic-transition-from-open-to-half-open-enabled=true
-resilience4j.circuitbreaker.instances.external.wait-duration-in-open-state=5s
-resilience4j.circuitbreaker.instances.external.permitted-number-of-calls-in-half-open-state=3
-resilience4j.circuitbreaker.instances.external.sliding-window-size=10
-resilience4j.circuitbreaker.instances.external.sliding-window-type=COUNT_BASED
-
-
-GITHUB-BRANCH and methods to push
-
-git remote add origin https://github.com/KaushalPrajapat/shoping-app.git
-git branch -M main
-git push -u origin main
