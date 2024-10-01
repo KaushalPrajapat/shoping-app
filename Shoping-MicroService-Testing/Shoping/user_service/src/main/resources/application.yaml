@@ -8,7 +8,7 @@ spring:
 
   # Database Properties
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/shopingdb
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/shopping-db
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
