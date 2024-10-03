@@ -8,7 +8,7 @@ spring:
 
   # Database Properties
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/shopping-db
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/shopping_db
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -20,7 +20,7 @@ spring:
 
   # Config Server
   config:
-    import: optional:configserver:http://localhost:9296
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:9296}
 
   # OKTA client
   security:
@@ -44,10 +44,15 @@ resilience4j:
   circuitbreaker:
     instances:
       external:
-        registerHealthIndicator: true
-        slidingWindowSize: 5
-        failureRateThreshold: 50
-        waitDurationInOpenState: 10000
+        event-consumer-buffer-size: 10
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: COUNT_BASED
+
 
 # Uncomment the following properties if needed for external circuit breaker
 # resilience4j:

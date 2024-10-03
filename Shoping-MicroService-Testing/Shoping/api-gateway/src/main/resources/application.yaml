@@ -1,6 +1,12 @@
 server:
   port: 8765
-
+okta:
+  oauth2:
+    issuer: https://dev-60234677.okta.com/oauth2/default
+    audience: api://default
+    client-id: 0oajutv11yU0bi6MP5d7
+    client-secret: z5pkRQTBrxnxhexRess4C_TSv_0jBIzqwEHfxnw4S1_Qw9VU_zOeskOPRsOTUOdM
+    scopes: openid, email, profile, offline_access
 
 spring:
 
@@ -8,7 +14,7 @@ spring:
     name: API-GATEWAY
   # Config server link to fetch Eureka properties
   config:
-    import: optional:configserver:http://localhost:9296
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:9296}
  
   cloud:
     gateway:
@@ -19,53 +25,48 @@ spring:
             - Path=/order/**
           
 
-          # filters:
-          #   - name: CircuitBreaker
-          #     args:
-          #       name: ORDER-SERVICE
-          #       fallbackUri: forward:/orderFallBack
-          #       circuitBreakerId: ORDER-SERVICE-CB
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ORDER-SERVICE
+                fallbackUri: forward:/orderFallBack
+                circuitBreakerId: ORDER-SERVICE-CB
 
         - id: PAYMENT-SERVICE
           uri: lb://PAYMENT-SERVICE
           predicates:
             - Path=/payment/**
-            - Method=DELETE, PUT, GET, POST
-          # filters:
-          #   - name: CircuitBreaker
-          #     args:
-          #       name: PAYMENT-SERVICE
-          #       fallbackUri: forward:/paymentFallBack
-          #       circuitBreakerId: PAYMENT-SERVICE-CB
+            - Method=DELETE,PUT,GET,POST
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: PAYMENT-SERVICE
+                fallbackUri: forward:/paymentFallBack
+                circuitBreakerId: PAYMENT-SERVICE-CB
 
         - id: USER-SERVICE
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/**
-            - Method=DELETE, PUT, GET, POST
-          # filters:
-          #   - name: CircuitBreaker
-          #     args:
-          #       name: USER-SERVICE
-          #       fallbackUri: forward:/userFallBack
-          #       circuitBreakerId: USER-SERVICE-CB
+            - Path=/user/**            
+            - Method=DELETE,PUT,GET,POST
+
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-SERVICE
+                fallbackUri: forward:/userFallBack
+                circuitBreakerId: USER-SERVICE-CB
 
         - id: PRODUCT-SERVICE
           uri: lb://PRODUCT-SERVICE
           predicates:
             - Path=/product/**
-            - Method=DELETE, PUT, GET, POST
-          # filters:
-          #   - name: CircuitBreaker
-          #     args:
-          #       name: PRODUCT-SERVICE
-          #       fallbackUri: forward:/productFallBack
-          #       circuitBreakerId: PRODUCT-SERVICE-CB
+            - Method=DELETE,PUT,GET,POST
 
-okta:
-  oauth2:
-    issuer: https://dev-60234677.okta.com/oauth2/default
-    audience: api://default
-    client-id: 0oajutv11yU0bi6MP5d7
-    client-secret: z5pkRQTBrxnxhexRess4C_TSv_0jBIzqwEHfxnw4S1_Qw9VU_zOeskOPRsOTUOdM
-    scopes: openid, email, profile, offline_access
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: PRODUCT-SERVICE
+                fallbackUri: forward:/productFallBack
+                circuitBreakerId: PRODUCT-SERVICE-CB
+

@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import com.shoping.order_service.entities.PaymentEntity;
+import com.shoping.order_service.errors.CustomException;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+@CircuitBreaker(name = "external", fallbackMethod = "fallback")
 @FeignClient(name = "PAYMENT-SERVICE/payment")
 @Service
 public interface PaymentServiceProxyIF {
@@ -20,4 +24,9 @@ public interface PaymentServiceProxyIF {
 
     @PostMapping("/pay")
     public ResponseEntity<?> pay(@SpringQueryMap PaymentEntity payment);
+
+    default ResponseEntity<?> fallback(Exception e) {
+        throw new CustomException("Payment Service is not available",
+                "UNAVAILABLE");
+    }
 }

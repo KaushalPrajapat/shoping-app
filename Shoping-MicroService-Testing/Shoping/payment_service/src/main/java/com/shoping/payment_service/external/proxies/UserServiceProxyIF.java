@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.shoping.payment_service.entities.Users;
+import com.shoping.payment_service.errors.CustomException;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+@CircuitBreaker(name = "external", fallbackMethod = "fallback")
 @FeignClient(name = "USER-SERVICE/user")
 @Service
 public interface UserServiceProxyIF {
@@ -19,8 +23,13 @@ public interface UserServiceProxyIF {
     ResponseEntity<Users> doPayment(@PathVariable long userId, @PathVariable double balance);
 
     @PutMapping("/balance/undo/{userId}/{balance}")
-    ResponseEntity<Users> undoPayment(@PathVariable long userId, @PathVariable double balance );
+    ResponseEntity<Users> undoPayment(@PathVariable long userId, @PathVariable double balance);
 
     @GetMapping("/getbalance/{userId}")
     ResponseEntity<Double> getBalance(@PathVariable long userId);
+
+    default ResponseEntity<Users> fallback(Exception e) {
+        throw new CustomException("Product Service is not available",
+                "UNAVAILABLE");
+    }
 }
