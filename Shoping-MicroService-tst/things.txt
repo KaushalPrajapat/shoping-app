@@ -1,0 +1,202 @@
+EMPLOYEE Micro-service is in personal PC +
+Personal PC files are at GITHUB : https://github.com/KaushalPrajapat/microServicePersonalPC.git
+
+https://app.diagrams.net/
+
+Now Implement 
+	PRODUCT				8100
+	ORDER				8200
+	USER				8300
+	PAYMENT				8400
+	CONFIG				9296
+	API GATEWAY			8765
+	SERVER_REGISTRY			8761
+New Here:
+	Security at ORDER, USER, PAYMENT, API-GATEWAY, PAYMENT
+
+Added controllers in API-GATEWAY
+Controller:
+	> GET - login
+
+LINKS:
+	localhost:8765/authenticate/login (okta-credentials)
+						prajapatkaushal555@gmail.com	-	okta@kaushal
+
+
+1.PRODUCT		8100
+Controller 
+	: /product
+	> GET - getAllProducts				done
+	> POST - addProduct				done
+	> GET - getProductsByprodNameOrProdPrice	done
+		- if name given (Contains)
+		- if price	(equals)
+		- if none given	(return all)
+		- if both given	(filter both)
+
+	: /product/{id}		
+	> GET - getProductById				done
+	> DELETE - deleteProductById			done
+	> PUT - updateProduct				done
+
+                		
+
+
+
+
+2.PRODUCT-SERVICE
+LINKS
+	GET 		localhost:8100/product
+	POST 		localhost:8100/product (RequestBody product)
+	GET		localhost:8100/product/productId (PathVariable long prodId)
+	GET		localhost:8100/product/filter?prodName=Realme&prodPrice=18999 (RequestParam 2)
+	DELETE		localhost:8100/product/productId (PathVariable long prodId)
+	PUT		localhost:8100/product/productId (PathVariable long prodId)
+
+ENTITIES & MODELS -
+	PRODUCT     	
+		private long prodId;
+		private String prodName;
+		private String prodDesc;
+		private long prodQuantity;
+		private double prodPrice;
+	PRODUCT_DTO
+		private String prodName;
+		private String prodDesc;
+		private double prodPrice;
+		private long prodQuantity;
+
+
+
+3.PAYMENT-SERVICE
+LINKS -
+	PUT		localhost:8400/payment/undo/30 (PathVariable long paymentId)
+	POST	localhost:8400/payment/do (@RequestBody paymentEntity)
+	POST 	localhost:8400/payment/pay
+			pay(@RequestParam double payAmount,
+			@RequestParam long orderId,
+			@RequestParam String paymentMode,
+			@RequestParam long paymentId,
+			@RequestParam String paymentReferance,
+			@RequestParam long userId,
+			@RequestParam String paymentStatus)
+
+ENTITIES & MODELS -
+	PAYMENT-ENTITY
+		private long paymentId;
+		private String paymentMode;
+		private String paymentReferance; // One unique UUID
+		private long orderId;
+		private long userId;
+		private Instant paymentDate;
+		private String paymentStatus;
+		private double payAmounT
+	USER 
+		private long userId;
+		private double balance;
+    
+
+4.USER-SERVICE
+LINKS
+	POST 		localhost:8300/user (RequestBody Users)
+	GET		localhost:8300/user (will return all users)
+	GET		localhost:8300/user/userId (PathVariable userId)
+	GET		localhost:8300/user/balance (PathVariable userId)(return balance)
+	DELETE		localhost:8300/user/userId (PathVariable userId)
+	PUT		localhost:8300/user/userId (RequestBody Users, PathVariable userId)
+	PUT		localhost:8300/user/addbalance/userId (PathVariable userId, Pathvariable double balancetoAdd)
+	PUT		localhost:8300/user/balance/do/{userId}/{balance} (PathVariable userId, Pathvariable double balancetoAdd)
+	PUT		localhost:8300/user/balance/undo/{userId}/{balance} (PathVariable userId, Pathvariable double balancetoAdd)
+
+ENTITIES & MODELS -
+	USERS
+		private long userId;
+		private String firstName;
+		private String lastName;
+		private String email;
+		private String phone;
+		private double balance;
+
+
+ORDER-SERVICE
+LINKS
+	POST 	localhost:8200/order/place-order (RequestBody OrderRequest)
+	GET 	localhost:8200/order (PathVariable OrderId)
+	DELETE 	localhost:8200/order/delete/orderId (PathVariable OrderId)
+
+ENTITIES & MODELS
+	ORDER_REQUEST 
+		private long prodId;
+		private long orderQuantity;
+		private PaymentMode paymentMode;
+		private long userId;
+	ORDER
+		private long orderId;
+		private Long prodId;
+		private long orderQuantity;
+		private double totalAmount;
+		private Instant orderDate;
+		private String orderStatus;
+		private PaymentMode paymentMode;
+		private long paymentId;
+		private long userId;
+	PAYMENTENTITY
+		private long paymentId;
+		private String paymentMode;
+		private long orderId;
+		private long userId;
+		private double payAmount;
+		private String paymentReferance; // One unique UUID
+		private Instant paymentDate;
+		private String paymentStatus;
+	PRODUCTPROXY
+		private long prodId;
+		private String prodName;
+		private String prodDesc;
+		private long prodQuantity;
+		private double prodPrice;
+	USERS
+		private long userId;
+		private String firstName;
+		private String lastName;
+		private String email;
+	ORDER_RESPONSE
+			// From Order
+		private long orderId;
+		private Instant orderDate;
+		private String orderStatus;
+		private long orderQuantity;
+			// From Product Service
+		private String prodName;
+		private double prodPrice;
+			// From Payment
+		private long paymentId;
+		private String paymentReferance;
+		private double totalAmount;
+		private PaymentMode paymentMode;
+			// From User
+		private String userName;
+		private String userEmail;
+		// Extra if somthing need to be shown
+		private String message;
+
+ENUM
+	PAYMENTMODE
+		CASH, PAY_PAL, CREDIT_CARD, DEBIT_CARD, APPLE_PAY, PHONE_PAY, CRED, PAYTM, POP, OTHER
+
+
+
+
+NOTE : USED in all services
+RESPONSE_EXCEPTION
+    private String message;
+    private String httpStatus;
+
+
+
+
+GITHUB-BRANCH and methods to push
+
+git remote add origin https://github.com/KaushalPrajapat/shoping-app.git
+git branch -M main
+git push -u origin main

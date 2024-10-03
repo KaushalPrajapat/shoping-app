@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: ORDER-SERVICE
+
+  # Server configuration
+  datasource:
+    url: jdbc:h2:mem:shoping
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # Config server link to fetch Eureka properties
+  config:
+    import: optional:configserver:http://localhost:9296
+
+  # OKTA configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-60234677.okta.com/oauth2/default
+      client:
+        registration:
+          internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: 0oajutv11yU0bi6MP5d7
+            client-secret: z5pkRQTBrxnxhexRess4C_TSv_0jBIzqwEHfxnw4S1_Qw9VU_zOeskOPRsOTUOdM
+        provider:
+          okta:
+            issuer-uri: https://dev-60234677.okta.com/oauth2/default
+
+# Server port configuration
+server:
+  port: 8200
+eureka:
+  client:
+    enabled: false
