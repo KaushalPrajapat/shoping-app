@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  serviceregistry:
+    image: service-registry
+    container_name: serviceregistry
+    ports:
+      - '8761:8761'
+    networks:
+      - network
+      
+  configserver:
+    image: config-server
+    container_name: configserver
+    ports:
+      - '9296:9296'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://configserver:9296/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - serviceregistry
+    networks:
+      - network
+
+  apigateway:
+    image: api-gateway
+    container_name: apigateway
+    ports:
+      - '8765:8765'
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka
+      - CONFIG_SERVER_URL=http://host.docker.internal:9296
+    depends_on:
+      configserver:
+        condition: service_healthy
+    networks:
+      - network
+networks:
+  network:
+    driver: bridge
+
+  # orderservice:
+  #   image: order-service
+  #   ports:
+  #     - 8200:8200
+  #   environment:
+  #     - EUREKA_SERVER_ADDRESS=http://serviceregistry:8761/eureka
+  #     - CONFIG_SERVER_URL=configserver
+  #     - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/shopping_db
+  #   depends_on:
+  #       configserver:
+  #         condition: service_healthy
+  
+  # mysql:
+  #   image: mysql
+  #   container_name: mysql
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: shopping_db
+  #   ports:
+  #     - "3307:3306"  # Note: MySQL default port is 3306
+  #   volumes:
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql

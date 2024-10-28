@@ -1,0 +1,31 @@
+# Build a docker image
+docker build --tag config-server .
+docker build --tag service-registry . [. means in current directory Dockerfile exists]
+[Go into service folder build jar file, Build docker file named as Dockerfile]
+-t image name can we mutiple
+---
+docker run -it --name config --network my_network -e EUREKA_SERVER_ADDRESS=service-registry:8761 -p 9692:9692 config-server
+How to run docker file
+docker run -it --name service-registry -p8761:8761 service-registry
+docker run -it -p9296:9296 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka --name config-server config-server
+docker run -it -p8765:8765 -e CONFIG_SERVER_URL=http://host.docker.internal:9296 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka --name api-gateway api-gateway
+docker run -it -p8200:8200 -e hibernate.dialect=org.hibernate.dialect.MySQL8Dialect -e CONFIG_SERVER_URL=http://host.docker.internal:9296 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka -e DB_HOST=http://host.docker.internal:3306 --name order-service order-service
+
+
+
+docker run -it -p8200:8200 --network my_network -e hibernate.dialect=org.hibernate.dialect.MySQL8Dialect -e CONFIG_SERVER_URL=http://host.docker.internal:9296 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8761/eureka -e DB_HOST=http://host.docker.internal:3306 --name order-service order-service
+
+
+-it for interactive mode 
+-d for detaich mode
+-e for envirnoment varibales
+--name name of container
+in end service --name
+-pXXXX:YYYY [localPort : containerPort]
+
+
+docker run --name mysql -e MYSQL_ROOT_PASSWORD="" -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -it -p3306:3306 -it mysql 
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -d mysql
+docker run --name mysql --network my_network -e MYSQL_ROOT_PASSWORD=root -d mysql
+docker exec -it mysql mysql -uroot -p      GIVE password as "root" [mera  h ye]
+docker exec -it mysql bash
