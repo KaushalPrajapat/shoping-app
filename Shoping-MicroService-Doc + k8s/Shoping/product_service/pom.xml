@@ -116,19 +116,19 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<configuration>
-					<from>
-						<image>openjdk:17</image>
-					</from>
-					<to>
-						<image>registry.hub.docker.com/vision97/${artifactId}</image>
-						<tags>${project.version}</tags>
-					</to>
-				</configuration>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>com.google.cloud.tools</groupId>-->
+<!--				<artifactId>jib-maven-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--					<from>-->
+<!--						<image>openjdk:17</image>-->
+<!--					</from>-->
+<!--					<to>-->
+<!--						<image>registry.hub.docker.com/vision97/${artifactId}</image>-->
+<!--						<tags>${project.version}</tags>-->
+<!--					</to>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 </project>

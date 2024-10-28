@@ -14,7 +14,7 @@ spring:
     name: API-GATEWAY
   # Config server link to fetch Eureka properties
   config:
-    import: configserver:${CONFIG_SERVER_URL:http://localhost:9296}
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:9296}
  
   cloud:
     gateway:
